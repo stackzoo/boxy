@@ -1,4 +1,8 @@
 # BOXY
+
+[![ansible-lint](https://github.com/stackzoo/boxy/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/stackzoo/boxy/actions/workflows/ansible-lint.yml)
+<br/>
+
 **Boxy** is a repository that we rely heavily on at *stackzoo*.
 <br/>
 It basically contains *vagrant* scripts (*hcl*) and *ansible* playbooks that allow our engineers to quickly provision linux VMs.
