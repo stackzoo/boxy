@@ -69,21 +69,21 @@
         proto: any
         policy: deny
       notify:
-      - reload ufw
+        - reload ufw
     - name: UFW ALLOW OUTGOING
       ufw:
         direction: outgoing
         proto: any
         policy: allow
       notify:
-      - reload ufw
+        - reload ufw
     - name: UFW ALLOW SSH
       ufw:
         rule: allow
         port: "{{ ssh_port }}"
         proto: tcp
       notify:
-      - reload ufw
+        - reload ufw
     - name: STOP AND START SSH
       service:
         name: ssh
@@ -95,10 +95,10 @@
       ufw:
         state: enabled
     # - name: EXTEND DISK PARTITION
-     #  ansible.builtin.shell: > 
-                        # sudo growpart /dev/sda 3 
-                        # && sudo pvs 
-                        # && sudo pvresize /dev/sda3 
+     #  ansible.builtin.shell: >
+                        # sudo growpart /dev/sda 3
+                        # && sudo pvs
+                        # && sudo pvresize /dev/sda3
                         # && sudo lvextend -r -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
       # ignore_errors: true
     - name: SET RETENTION POLICY FOR SYSTEM LOGS ==> ONE WEEK
@@ -106,7 +106,7 @@
         cmd: sudo journalctl --vacuum-time=3d
     - name: REBOOT PROBE
       reboot:
-         reboot_timeout: 3600
+        reboot_timeout: 3600
   handlers:
     - name: reload ufw
       ufw:
@@ -121,20 +121,20 @@
     # unattended_automatic_reboot_time: "11:01"
     # unattended_update_days: 4 #  "0" is Sunday, "1" is Monday etc.
     # unattended_package_blacklist: [cowsay, vim]
-  - role: gantsign.keyboard # set italian keyboard
+    - role: gantsign.keyboard # set italian keyboard
     #  European keyboard model (pc105 is widely used outside Europe as well)
-    keyboard_model: pc105
-    keyboard_layout: it
-  - role: xanmanning.sublime #  install sublime text editor
-  # - role: gantsign.golang #  install golang sdk
-  # - role: gantsign.postman #  install postman
-  - role: ypsman.ipv6_disable # disable ipv6
-  - role: gantsign.visual-studio-code #  install vs code
-  - role: gantsign.oh-my-zsh #  install zsh terminal
-    oh_my_zsh_theme: agnoster
-    users:
-      - username: "{{ probe_user }}"
-        oh_my_zsh:
-          theme: agnoster
-          plugins:
-            - git
+      keyboard_model: pc105
+      keyboard_layout: it
+    - role: xanmanning.sublime #  install sublime text editor
+    # - role: gantsign.golang #  install golang sdk
+    # - role: gantsign.postman #  install postman
+    - role: ypsman.ipv6_disable # disable ipv6
+    - role: gantsign.visual-studio-code #  install vs code
+    - role: gantsign.oh-my-zsh #  install zsh terminal
+      oh_my_zsh_theme: agnoster
+      users:
+        - username: "{{ probe_user }}"
+          oh_my_zsh:
+            theme: agnoster
+            plugins:
+              - git
