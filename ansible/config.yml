@@ -31,10 +31,10 @@
         update_cache: true
     - name: Ensure a locale exists
       community.general.locale_gen:
-        name: it_IT.UTF-8
+        name: en_US.UTF-8
         state: present
     - name: set as default locale
-      command: localectl set-locale LANG=it_IT.UTF-8
+      command: localectl set-locale LANG=en_US.UTF-8
     - name: ADD apt-key FOR DOCKER
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
