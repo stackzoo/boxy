@@ -1,0 +1,10 @@
+---
+roles:
+  # Install a role from Ansible Galaxy.
+  - name: gantsign.keyboard
+  - name: ypsman.ipv6_disable
+  - name: gantsign.visual-studio-code
+  - name: gantsign.oh-my-zsh
+#  - name: gantsign.golang
+#  - name: gantsign.postman
+  - name: xanmanning.sublime

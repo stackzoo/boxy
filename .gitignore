@@ -1,0 +1,8 @@
+# for macOS development
+.DS_Store
+
+# for vagrant
+.vagrant/
+
+# for ansible
+*.retry

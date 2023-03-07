@@ -1,0 +1,140 @@
+---
+- hosts: all
+  become: true
+  tags:
+    - configuration
+  gather_facts: true
+  vars:
+    ssh_port: 22
+    probe_user: vagrant
+    docker_daemon_config_path: "/etc/docker"
+    docker_log_max_files: "6"
+    docker_log_file_max_size: "10k"
+  tasks:
+    #- name: RUN ANSIBLE GALAXY
+      #local_action: command ansible-galaxy install -r requirements.yml --ignore-errors
+    - name: INSTALL REQUIRED PACKAGES
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+          - net-tools
+          - tcptraceroute
+          - python3-pip
+          - git
+          - gparted
+          - gnupg
+          - kgpg
+        update_cache: true
+    - name: ADD apt-key FOR DOCKER
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+    - name: ADD DOCKER REPO
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+    - name: INSTALL DOCKER
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        update_cache: true
+    - name: ADD USER PERMISSION FOR DOCKER
+      shell: "usermod -aG docker {{ probe_user }}"
+    - name: GENERATING DOCKER DAEMON CONFIG FILE IN {{ docker_daemon_config_path }}
+      copy:
+        dest: "{{ docker_daemon_config_path }}/daemon.json"
+        content: |
+          {
+              "log-driver": "json-file",
+              "log-opts": {
+              "max-size": "{{ docker_log_file_max_size }}",
+              "max-file": "{{ docker_log_max_files }}"
+              }
+          }
+    - name: RESTART DOCKER DAEMON
+      shell: "sudo service docker restart"
+    #- name: CHANGE DEFAULT SSH PORT
+      #lineinfile:
+        #dest: /etc/ssh/sshd_config
+        #regexp: '^#Port'
+        #line: 'Port "{{ ssh_port }}"'
+    - name: UFW DENY INCOMING
+      ufw:
+        direction: incoming
+        proto: any
+        policy: deny
+      notify:
+      - reload ufw
+    - name: UFW ALLOW OUTGOING
+      ufw:
+        direction: outgoing
+        proto: any
+        policy: allow
+      notify:
+      - reload ufw
+    - name: UFW ALLOW SSH
+      ufw:
+        rule: allow
+        port: "{{ ssh_port }}"
+        proto: tcp
+      notify:
+      - reload ufw
+    - name: STOP AND START SSH
+      service:
+        name: ssh
+        state: restarted
+    #- name: CHANGE SSH PORT TO {{ ssh_port }}
+     # set_fact:
+       # ansible_port: "{{ ssh_port }}"
+    - name: ENABLE UFW SERVICE
+      ufw:
+        state: enabled
+    #- name: EXTEND DISK PARTITION
+     # ansible.builtin.shell: > 
+                        #sudo growpart /dev/sda 3 
+                        #&& sudo pvs 
+                        #&& sudo pvresize /dev/sda3 
+                        #&& sudo lvextend -r -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+      #ignore_errors: true
+    - name: SET RETENTION POLICY FOR SYSTEM LOGS ==> ONE WEEK
+      ansible.builtin.shell:
+        cmd: sudo journalctl --vacuum-time=3d
+    - name: REBOOT PROBE
+      reboot:
+         reboot_timeout: 3600
+  handlers:
+    - name: reload ufw
+      ufw:
+        state: reloaded
+  roles:
+  #- role: jnv.unattended-upgrades #configure unattended upgrade
+    #unattended_origins_patterns:
+      #- 'origin=Ubuntu,archive=${distro_codename}-security'
+      #- 'o=Ubuntu,a=${distro_codename}-updates'
+    #unattended_automatic_reboot: true
+    #unattended_remove_unused_dependencies: true
+    #unattended_automatic_reboot_time: "11:01"
+    #unattended_update_days: 4 # "0" is Sunday, "1" is Monday etc.
+    #unattended_package_blacklist: [cowsay, vim]
+  - role: gantsign.keyboard #set italian keyboard
+    # European keyboard model (pc105 is widely used outside Europe as well)
+    keyboard_model: pc105
+    keyboard_layout: it
+  - role: xanmanning.sublime # install sublime text editor
+  #- role: gantsign.golang # install golang sdk
+  #- role: gantsign.postman # install postman
+  - role: ypsman.ipv6_disable #disable ipv6
+  - role: gantsign.visual-studio-code # install vs code
+  - role: gantsign.oh-my-zsh # install zsh terminal
+    oh_my_zsh_theme: agnoster
+    users:
+      - username: "{{ probe_user }}"
+        oh_my_zsh:
+          theme: agnoster
+          plugins:
+            - git
