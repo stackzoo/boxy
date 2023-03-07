@@ -33,7 +33,7 @@ apply the changes that best suit your needs and then spin up the provisioning:
 vagrant up
 ```
 
-Please note that the ansible playbook can be used to configure
+Please note that the ansible playbook can also be executed against manually installed VM (eg. with vmware workstation or virtualbox).
 
 ## Useful Commands
 
