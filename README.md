@@ -15,7 +15,7 @@ Our members are free to follow the working method that best suits them but our a
 - <a href="https://www.virtualbox.org/">virtualbox</a>
 - <a href="https://developer.hashicorp.com/vagrant/docs/plugins">vagrant plugins</a> (*vagrant-disksize*, *vagrant-vbguest*)
 
-Note that, as of *08/03/2023*, `vagrant` and `virtualbox` are not fully supported on *macOS silicon*
+Note that, as of *10/03/2023*, `vagrant` and `virtualbox` are not fully supported on *macOS silicon*
 and `ansible` does not run on Windows unless you are using <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a>.
 <br/>
 Given this preamble, we at *stackzoo* strongly recommend using a linux machine for development, preferably *debian* based, such as <a href="https://ubuntu.com/">ubuntu</a>.
