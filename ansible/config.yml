@@ -11,8 +11,8 @@
     docker_log_max_files: "6"
     docker_log_file_max_size: "10k"
   tasks:
-    #- name: RUN ANSIBLE GALAXY
-      #local_action: command ansible-galaxy install -r requirements.yml --ignore-errors
+    # - name: RUN ANSIBLE GALAXY
+      # local_action: command ansible-galaxy install -r requirements.yml --ignore-errors
     - name: INSTALL REQUIRED PACKAGES
       apt:
         name:
@@ -58,11 +58,11 @@
           }
     - name: RESTART DOCKER DAEMON
       shell: "sudo service docker restart"
-    #- name: CHANGE DEFAULT SSH PORT
-      #lineinfile:
-        #dest: /etc/ssh/sshd_config
-        #regexp: '^#Port'
-        #line: 'Port "{{ ssh_port }}"'
+    # - name: CHANGE DEFAULT SSH PORT
+      # lineinfile:
+        # dest: /etc/ssh/sshd_config
+        # regexp: '^# Port'
+        # line: 'Port "{{ ssh_port }}"'
     - name: UFW DENY INCOMING
       ufw:
         direction: incoming
@@ -88,19 +88,19 @@
       service:
         name: ssh
         state: restarted
-    #- name: CHANGE SSH PORT TO {{ ssh_port }}
-     # set_fact:
-       # ansible_port: "{{ ssh_port }}"
+    # - name: CHANGE SSH PORT TO {{ ssh_port }}
+     #  set_fact:
+       #  ansible_port: "{{ ssh_port }}"
     - name: ENABLE UFW SERVICE
       ufw:
         state: enabled
-    #- name: EXTEND DISK PARTITION
-     # ansible.builtin.shell: > 
-                        #sudo growpart /dev/sda 3 
-                        #&& sudo pvs 
-                        #&& sudo pvresize /dev/sda3 
-                        #&& sudo lvextend -r -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
-      #ignore_errors: true
+    # - name: EXTEND DISK PARTITION
+     #  ansible.builtin.shell: > 
+                        # sudo growpart /dev/sda 3 
+                        # && sudo pvs 
+                        # && sudo pvresize /dev/sda3 
+                        # && sudo lvextend -r -l +100%FREE /dev/mapper/ubuntu--vg-ubuntu--lv
+      # ignore_errors: true
     - name: SET RETENTION POLICY FOR SYSTEM LOGS ==> ONE WEEK
       ansible.builtin.shell:
         cmd: sudo journalctl --vacuum-time=3d
@@ -112,25 +112,25 @@
       ufw:
         state: reloaded
   roles:
-  #- role: jnv.unattended-upgrades #configure unattended upgrade
-    #unattended_origins_patterns:
-      #- 'origin=Ubuntu,archive=${distro_codename}-security'
-      #- 'o=Ubuntu,a=${distro_codename}-updates'
-    #unattended_automatic_reboot: true
-    #unattended_remove_unused_dependencies: true
-    #unattended_automatic_reboot_time: "11:01"
-    #unattended_update_days: 4 # "0" is Sunday, "1" is Monday etc.
-    #unattended_package_blacklist: [cowsay, vim]
-  - role: gantsign.keyboard #set italian keyboard
-    # European keyboard model (pc105 is widely used outside Europe as well)
+  # - role: jnv.unattended-upgrades # configure unattended upgrade
+    # unattended_origins_patterns:
+      # - 'origin=Ubuntu,archive=${distro_codename}-security'
+      # - 'o=Ubuntu,a=${distro_codename}-updates'
+    # unattended_automatic_reboot: true
+    # unattended_remove_unused_dependencies: true
+    # unattended_automatic_reboot_time: "11:01"
+    # unattended_update_days: 4 #  "0" is Sunday, "1" is Monday etc.
+    # unattended_package_blacklist: [cowsay, vim]
+  - role: gantsign.keyboard # set italian keyboard
+    #  European keyboard model (pc105 is widely used outside Europe as well)
     keyboard_model: pc105
     keyboard_layout: it
-  - role: xanmanning.sublime # install sublime text editor
-  #- role: gantsign.golang # install golang sdk
-  #- role: gantsign.postman # install postman
-  - role: ypsman.ipv6_disable #disable ipv6
-  - role: gantsign.visual-studio-code # install vs code
-  - role: gantsign.oh-my-zsh # install zsh terminal
+  - role: xanmanning.sublime #  install sublime text editor
+  # - role: gantsign.golang #  install golang sdk
+  # - role: gantsign.postman #  install postman
+  - role: ypsman.ipv6_disable # disable ipv6
+  - role: gantsign.visual-studio-code #  install vs code
+  - role: gantsign.oh-my-zsh #  install zsh terminal
     oh_my_zsh_theme: agnoster
     users:
       - username: "{{ probe_user }}"
