@@ -132,8 +132,8 @@
       keyboard_model: pc105
       keyboard_layout: it
     - role: xanmanning.sublime #  install sublime text editor
-    # - role: gantsign.golang #  install golang sdk
-    # - role: gantsign.postman #  install postman
+    - role: gantsign.golang #  install golang sdk
+    - role: gantsign.postman #  install postman
     - role: ypsman.ipv6_disable # disable ipv6
     - role: gantsign.visual-studio-code #  install vs code
     - role: gantsign.oh-my-zsh #  install zsh terminal

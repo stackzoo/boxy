@@ -5,8 +5,8 @@ roles:
   - name: ypsman.ipv6_disable
   - name: gantsign.visual-studio-code
   - name: gantsign.oh-my-zsh
-#  - name: gantsign.golang
-#  - name: gantsign.postman
+  - name: gantsign.golang
+  - name: gantsign.postman
   - name: xanmanning.sublime
 
 collections:
